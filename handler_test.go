@@ -7,7 +7,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"runtime"
+	"runtime/pprof"
+	"runtime/trace"
 	"strconv"
 	"strings"
 	"testing"
@@ -378,6 +381,42 @@ func BenchmarkGin_BigPayload(b *testing.B) {
 }
 
 func BenchmarkGinWithDefaultHandler_BigPayload(b *testing.B) {
+	// 内存、CPU、trace等收集
+	methodName := "BenchmarkGinWithDefaultHandler_BigPayload"
+	currentDirName, _ := os.Getwd()
+	logDirName := currentDirName + "/log/" + methodName + "_trace.out"
+	// 收集trace信息
+	traceFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	err = trace.Start(traceFile)
+	if err != nil {
+		panic("start trace fail :" + err.Error())
+	}
+	defer trace.Stop()
+
+	// 收集CPU信息
+	logDirName = currentDirName + "/log/" + methodName + "_cpu.out"
+	cpuFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer cpuFile.Close()
+	err = pprof.StartCPUProfile(cpuFile)
+	if err != nil {
+		panic("StartCPUProfile fail :" + err.Error())
+	}
+	defer pprof.StopCPUProfile()
+
+	// 收集内存信息
+	logDirName = currentDirName + "/log/" + methodName + "_mem.out"
+	memFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer pprof.WriteHeapProfile(memFile)
+
 	var (
 		g = newGinInstance(bigPayload, DefaultHandler().Gin)
 		r = httptest.NewRequest(http.MethodPost, "/", nil)
@@ -400,4 +439,41 @@ func BenchmarkGinWithDefaultHandler_BigPayload(b *testing.B) {
 	if encoding := w.Header().Get("Content-Encoding"); encoding != "br" {
 		b.Fatalf("Content-Encoding is not brotli, but %q", encoding)
 	}
+}
+
+func performance() {
+	methodName := "BenchmarkGinWithDefaultHandler_BigPayload"
+	currentDirName, _ := os.Getwd()
+	logDirName := currentDirName + "/log/" + methodName + "_trace.out"
+	// 收集trace信息
+	traceFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	err = trace.Start(traceFile)
+	if err != nil {
+		panic("start trace fail :" + err.Error())
+	}
+	defer trace.Stop()
+
+	// 收集CPU信息
+	logDirName = currentDirName + "/log/" + methodName + "_cpu.out"
+	cpuFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer cpuFile.Close()
+	err = pprof.StartCPUProfile(cpuFile)
+	if err != nil {
+		panic("StartCPUProfile fail :" + err.Error())
+	}
+	defer pprof.StopCPUProfile()
+
+	// 收集内存信息
+	logDirName = currentDirName + "/log/" + methodName + "_mem.out"
+	memFile, err := os.Create(logDirName)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer pprof.WriteHeapProfile(memFile)
 }

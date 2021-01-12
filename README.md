@@ -1,5 +1,9 @@
 # Brotli Middleware for Gin
 
+## 文档
+
+[GoDoc](https://pkg.go.dev/github.com/CodeLineage/brotli)
+
 ## 功能
 
 针对http输出数据进行压缩

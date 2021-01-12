@@ -1,3 +1,5 @@
+github.com/CodeLineage/brotli v0.0.1 h1:vmol8b20xuxVmWEJGcxsiC+sY7VKJ8FdFE/L1l+AcdU=
+github.com/CodeLineage/brotli v0.0.1/go.mod h1:g5VWaICxq4yNVarJ8J32yTFegO0jbJSHqSWW8iDCkI0=
 github.com/andybalholm/brotli v1.0.1 h1:KqhlKozYbRtJvsPrrEeXcO+N2l6NYT5A2QAFmSULpEc=
 github.com/andybalholm/brotli v1.0.1/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
