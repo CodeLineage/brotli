@@ -183,6 +183,8 @@ func (w *writerWrapper) WriteHeader(statusCode int) {
 	}
 
 	w.statusCode = statusCode
+	// write http status
+	w.OriginWriter.WriteHeader(w.statusCode)
 
 	if !w.shouldCompress {
 		return
