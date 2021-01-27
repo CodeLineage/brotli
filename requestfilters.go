@@ -45,7 +45,7 @@ func (r *RequestApiFilter) ShouldCompress(req *http.Request) bool {
 	if len(r.path) == 0 {
 		return true
 	}
-	curPath := req.RequestURI
+	curPath := req.URL.Path
 	for _, item := range r.path {
 		if item == curPath {
 			return true
